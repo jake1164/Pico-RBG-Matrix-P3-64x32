@@ -1,17 +1,19 @@
-# This example uses the adafruit_ntp library to connect to an NTP server and get the time
-# Requires a settings.toml file that is described [here](https://docs.circuitpython.org/en/latest/docs/environment.html)
-# Further example is provided [here](https://learn.adafruit.com/pico-w-wifi-with-circuitpython/create-your-settings-toml-file)
-# Required settings in settings file are as follows:
+# Requires a settings.toml file with the following
+# settings in settings file:
 # TZ_OFFSET=<timezone offset> ie TZ_OFFSET=-5
 # WIFI_SSID="your ssid"
 # WIFI_PASSWORD="yoursupersecretpassword"
-# DO NOT CHECK THE settings.toml file into Source Control, add a .gitignore for settings.toml
+# NTP_HOST="0.adafruit.pool.ntp.org"
+
 import os
 import ipaddress
 import wifi
 import socketpool
 import adafruit_ntp
-import rtc
+#import rtc
+import busio
+import board
+import adafruit_ds3231
 import time
 import struct
 
@@ -26,9 +28,16 @@ def get_time():
     ntp = adafruit_ntp.NTP(pool, tz_offset=TZ, server=NTP_HOST)    
     return ntp.datetime
 
+i2c = busio.I2C(board.GP7, board.GP6)
+rtc = adafruit_ds3231.DS3231(i2c)
+
 time = get_time()
 print(time)
 
 # NOTE: This changes the system time so make sure you aren't assuming that time
 # doesn't jump.
-rtc.RTC().datetime = time
+
+print(rtc.datetime)
+rtc.datetime = time
+print(rtc.datetime)
+
