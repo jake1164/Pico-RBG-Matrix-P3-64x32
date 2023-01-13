@@ -50,12 +50,12 @@ class DISPLAYSUBSYSTEM:
         self.time_format = timeFormat
         
     def showDateTimePage(self,line1,line2,line3):
-        line1.x = 3
-        line1.y = 36
+        line1.x = 2
+        line1.y = 4
         line2.x = 8
-        line2.y = 46
+        line2.y = 14
         line3.x = 10
-        line3.y = 56
+        line3.y = 24
         t = rtc.datetime  
         date =  "%04d" % t.tm_year + '-' + "%02d" % t.tm_mon + '-' + "%02d" % t.tm_mday
         if self.time_format == 0: # 12 hour
@@ -82,9 +82,9 @@ class DISPLAYSUBSYSTEM:
     def showSetListPage(self,line1,line2,_selectSettingOptions):
         global firstEnteringPageFlag
         line1.x = 8
-        line1.y = 39
+        line1.y = 7
         line2.x = 8
-        line2.y = 55
+        line2.y = 23
         line1.text = "SET LIST"
         if _selectSettingOptions == 0:
             line2.text = "TIME SET"
@@ -104,7 +104,7 @@ class DISPLAYSUBSYSTEM:
         global firstEnteringPageFlag
         if firstEnteringPageFlag == 1:
             line2.x = 8
-            line2.y = 45
+            line2.y = 13
             currentT = rtc.datetime
             _timeTemp[0] = currentT.tm_hour
             _timeTemp[1] = currentT.tm_min
@@ -115,20 +115,20 @@ class DISPLAYSUBSYSTEM:
         line3.text = "^"
         if _timeSettingLabel == 0:
             line3.x = 12
-            line3.y = 56
+            line3.y = 24
         elif _timeSettingLabel == 1:
             line3.x = 29
-            line3.y = 56
+            line3.y = 24
         else:
             line3.x = 47
-            line3.y = 56
+            line3.y = 24
 
 
     def dateSettingPage(self,line2,line3,_timeSettingLabel,_dateTemp):
         global firstEnteringPageFlag
         if firstEnteringPageFlag == 1:
             line2.x = 3
-            line2.y = 45
+            line2.y = 13
             currentD = rtc.datetime
             _dateTemp[0] = currentD.tm_year
             _dateTemp[1] = currentD.tm_mon
@@ -139,20 +139,20 @@ class DISPLAYSUBSYSTEM:
         line3.text = "^"
         if _timeSettingLabel == 0:
             line3.x = 12
-            line3.y = 56
+            line3.y = 24
         elif _timeSettingLabel == 1:
             line3.x = 36
-            line3.y = 56
+            line3.y = 24
         else:
             line3.x = 54
-            line3.y = 56
+            line3.y = 24
             
     def onOffPage(self,line2,line3,_selectSettingOptions,_beepFlag,_autoLightFlag, _timeFormatFlag):
         if _selectSettingOptions == 2:
             line2.x = 20
-            line2.y = 39
+            line2.y = 7
             line3.x = 20
-            line3.y = 55            
+            line3.y = 23            
             if _beepFlag:
                 line2.text = "> on"
                 line3.text = "  off"
@@ -161,9 +161,9 @@ class DISPLAYSUBSYSTEM:
                 line3.text = "> off"
         if _selectSettingOptions == 3:
             line2.x = 20
-            line2.y = 39
+            line2.y = 7
             line3.x = 20
-            line3.y = 55            
+            line3.y = 23            
             
             if _autoLightFlag:
                 line2.text = "> on"
@@ -173,9 +173,9 @@ class DISPLAYSUBSYSTEM:
                 line3.text = "> off"
         if _selectSettingOptions == 4:
             line2.x = 10
-            line2.y = 39
+            line2.y = 7
             line3.x = 10
-            line3.y = 55            
+            line3.y = 23            
 
             if _timeFormatFlag:
                 line2.text = "  12 Hr"
