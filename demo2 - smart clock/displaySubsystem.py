@@ -46,6 +46,9 @@ def _ymd2ord(year, month, day):
     return _days_before_year(year) + _days_before_month(year, month) + day
 
 class DISPLAYSUBSYSTEM:
+    def __init__(self, timeFormat):
+        self.time_format = timeFormat
+        
     def showDateTimePage(self,line1,line2,line3):
         line1.x = 3
         line1.y = 36
@@ -55,7 +58,21 @@ class DISPLAYSUBSYSTEM:
         line3.y = 56
         t = rtc.datetime  
         date =  "%04d" % t.tm_year + '-' + "%02d" % t.tm_mon + '-' + "%02d" % t.tm_mday
-        dayOfTime = "%02d" % t.tm_hour + ':' + "%02d" % t.tm_min + ':' + "%02d" % t.tm_sec
+        if self.time_format == 0: # 12 hour
+            if t.tm_hour == 0:
+                hour = 12
+            elif t.tm_hour < 13:
+                hour = t.tm_hour
+            else:
+                hour = t.tm_hour - 12
+                
+            dayOfTime = "{:2d}:{:02d} {}".format(
+                hour,
+                t.tm_min,
+                "PM" if t.tm_hour > 11 else "AM")
+        else: # 24 hour
+            dayOfTime = "%02d" % t.tm_hour + ':' + "%02d" % t.tm_min + ':' + "%02d" % t.tm_sec
+            
         line1.text = date
         line2.text = dayOfTime
         line3.text=days[int(t.tm_wday)]
@@ -77,6 +94,8 @@ class DISPLAYSUBSYSTEM:
             line2.text = "BEEP SET"
         if _selectSettingOptions == 3:
             line2.text = "autolight"
+        if _selectSettingOptions == 4:
+            line2.text = "12/24 hr"
         if firstEnteringPageFlag == 0:
             firstEnteringPageFlag = 1
             
@@ -103,6 +122,8 @@ class DISPLAYSUBSYSTEM:
         else:
             line3.x = 47
             line3.y = 56
+
+
     def dateSettingPage(self,line2,line3,_timeSettingLabel,_dateTemp):
         global firstEnteringPageFlag
         if firstEnteringPageFlag == 1:
@@ -126,12 +147,12 @@ class DISPLAYSUBSYSTEM:
             line3.x = 54
             line3.y = 56
             
-    def onOffPage(self,line2,line3,_selectSettingOptions,_beepFlag,_autoLightFlag):
-        line2.x = 20
-        line2.y = 39
-        line3.x = 20
-        line3.y = 55
+    def onOffPage(self,line2,line3,_selectSettingOptions,_beepFlag,_autoLightFlag, _timeFormatFlag):
         if _selectSettingOptions == 2:
+            line2.x = 20
+            line2.y = 39
+            line3.x = 20
+            line3.y = 55            
             if _beepFlag:
                 line2.text = "> on"
                 line3.text = "  off"
@@ -139,12 +160,29 @@ class DISPLAYSUBSYSTEM:
                 line2.text = "  on"
                 line3.text = "> off"
         if _selectSettingOptions == 3:
+            line2.x = 20
+            line2.y = 39
+            line3.x = 20
+            line3.y = 55            
+            
             if _autoLightFlag:
                 line2.text = "> on"
                 line3.text = "  off"
             else:
                 line2.text = "  on"
                 line3.text = "> off"
+        if _selectSettingOptions == 4:
+            line2.x = 10
+            line2.y = 39
+            line3.x = 10
+            line3.y = 55            
+
+            if _timeFormatFlag:
+                line2.text = "  12 Hr"
+                line3.text = "> 24 Hr"                
+            else:
+                line2.text = "> 12 Hr"
+                line3.text = "  24 Hr"                
                 
         
     
@@ -157,3 +195,7 @@ class DISPLAYSUBSYSTEM:
             w = (_ymd2ord(_dateTemp[0],_dateTemp[1], _dateTemp[2]) + 6) % 7
             t = time.struct_time((_dateTemp[0], _dateTemp[1], _dateTemp[2], getTime.tm_hour, getTime.tm_min, getTime.tm_sec, w, -1, -1))
             rtc.datetime = t
+
+
+    def setTimeFormat(self, _selectFormat):
+        self.time_format = _selectFormat

@@ -129,3 +129,7 @@ dmypy.json
 
 # Adafruit getenv settings
 settings.toml
+
+# VSCode related 
+.vscode
+.picowgo

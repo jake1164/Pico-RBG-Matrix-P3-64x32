@@ -26,6 +26,7 @@ startBeepFlag = 0
 beepCount = 0
 
 autoLightFlag = 0
+timeFormatFlag = 0 # 12 or 24 (0 or 1) hour display.
 
 selectSettingOptions = 0
 pageID = 0
@@ -34,11 +35,9 @@ timeSettingLabel = 0
 timeTemp = [0, 0, 0]  # hour,min,sec
 dateTemp = [0, 0, 0]  # year,mon,mday
 
-
 keyMenuValue = 0
 keyDownValue = 0
 keyUpValue = 0
-
 
 # Lookup table for names of days (nicer printing).
 
@@ -193,7 +192,7 @@ display.show(g)
 
 keyInput.keyInit()
 
-showSystem = displaySubsystem.DISPLAYSUBSYSTEM()
+showSystem = displaySubsystem.DISPLAYSUBSYSTEM(timeFormatFlag)
 
 
 def checkLightSensor():
@@ -212,7 +211,7 @@ def judgmentBuzzerSwitch():
         startBeepFlag = 1
 
 
-def isLeapYear(year):  # 判断是否为闰年
+def isLeapYear(year):
     if year % 4 == 0 and year % 100 != 0:
         return True
     if year % 400 == 0:
@@ -220,12 +219,11 @@ def isLeapYear(year):  # 判断是否为闰年
     return False
 
 
-def getMaxDay(month, year):  # 获取月份的最大天数
+def getMaxDay(month, year):
     if month < 1 or month > 12:
         print("error month")
         return -1
     maxDay = MaxDays[month]
-    # 判断2月天数
     if year != -1 and month == 2:
         if isLeapYear(year):
             maxDay += 1
@@ -244,14 +242,13 @@ def keyMenuProcessingFunction():
 
 
 def keyDownProcessingFunction():
-    global selectSettingOptions, timeTemp, dateTemp, beepFlag, autoLightFlag
+    global selectSettingOptions, timeTemp, dateTemp, beepFlag, autoLightFlag, timeFormatFlag
     if pageID == 1:
         selectSettingOptions -= 1
         if selectSettingOptions == -1:
-            selectSettingOptions = 3
+            selectSettingOptions = 4
     if pageID == 2:
-        if selectSettingOptions == 0:  # 选择列表为时间设置（0）
-            # 对时间进行设置
+        if selectSettingOptions == 0:
             if timeSettingLabel == 0:
                 timeTemp[0] -= 1
                 if timeTemp[0] < 0:
@@ -264,8 +261,7 @@ def keyDownProcessingFunction():
                 timeTemp[2] -= 1
                 if timeTemp[2] < 0:
                     timeTemp[2] = 59
-        if selectSettingOptions == 1:  # 选择列表为日期设置（1）
-            # 对日期进行设置
+        if selectSettingOptions == 1:
             if timeSettingLabel == 0:
                 dateTemp[0] -= 1
                 if dateTemp[0] < 2000:
@@ -278,29 +274,32 @@ def keyDownProcessingFunction():
                 dateTemp[2] -= 1
                 if dateTemp[2] < 1:
                     dateTemp[2] = getMaxDay(dateTemp[1], dateTemp[0])
-        if selectSettingOptions == 2:  # 选择列表为蜂鸣设置（2）
-            # 改变蜂鸣按键的开关
+        if selectSettingOptions == 2:
             if beepFlag:
                 beepFlag = 0
             else:
                 beepFlag = 1
-        if selectSettingOptions == 3:  # 选择列表为自动亮度设置（3）
-            # 改变自动亮度的开关
+        if selectSettingOptions == 3:
             if autoLightFlag:
                 autoLightFlag = 0
             else:
                 autoLightFlag = 1
+        if selectSettingOptions == 4:
+            if timeFormatFlag:
+                timeFormatFlag = 0 # 12 hour
+            else:
+                timeFormatFlag = 1 # 24 hour
+            showSystem.setTimeFormat(timeFormatFlag)
 
 
 def keyUpProcessingFunction():
-    global selectSettingOptions, timeTemp, dateTemp, beepFlag, autoLightFlag
+    global selectSettingOptions, timeTemp, dateTemp, beepFlag, autoLightFlag, timeFormatFlag
     if pageID == 1:
         selectSettingOptions += 1
-        if selectSettingOptions == 4:
+        if selectSettingOptions == 5:
             selectSettingOptions = 0
     if pageID == 2:
-        if selectSettingOptions == 0:  # 选择列表为时间设置（0）
-            # 对时间进行设置
+        if selectSettingOptions == 0:
             if timeSettingLabel == 0:
                 timeTemp[0] += 1
                 if timeTemp[0] == 24:
@@ -313,8 +312,7 @@ def keyUpProcessingFunction():
                 timeTemp[2] += 1
                 if timeTemp[2] == 60:
                     timeTemp[2] = 0
-        if selectSettingOptions == 1:  # 选择列表为日期设置（1）
-            # 对日期进行设置
+        if selectSettingOptions == 1:
             if timeSettingLabel == 0:
                 dateTemp[0] += 1
                 if dateTemp[0] > 2099:
@@ -327,23 +325,29 @@ def keyUpProcessingFunction():
                 dateTemp[2] += 1
                 if dateTemp[2] > getMaxDay(dateTemp[1], dateTemp[0]):
                     dateTemp[2] = 1
-        if selectSettingOptions == 2:  # 选择列表为蜂鸣设置（2）
-            # 改变蜂鸣按键的开关
+        if selectSettingOptions == 2:
             if beepFlag:
                 beepFlag = 0
             else:
                 beepFlag = 1
-        if selectSettingOptions == 3:  # 选择列表为自动亮度设置（3）
-            # 改变自动亮度的开关
+        if selectSettingOptions == 3:
             if autoLightFlag:
                 autoLightFlag = 0
             else:
                 autoLightFlag = 1
+        if selectSettingOptions == 4:
+            if timeFormatFlag:
+                timeFormatFlag = 0 # 12 hour
+            else:
+                timeFormatFlag = 1 # 24 hour
+            showSystem.setTimeFormat(timeFormatFlag)
+            
+            
 
 
 def keyExitProcessingFunction():
     global pageID, timeSettingLabel
-    if pageID == 2 and selectSettingOptions <= 1:  # 如果设置了时间或日期，退出时写入RTC
+    if pageID == 2 and selectSettingOptions <= 1: 
         showSystem.setDateTime(selectSettingOptions, dateTemp, timeTemp)
         timeSettingLabel = 0
     pageID -= 1
@@ -353,14 +357,14 @@ def keyExitProcessingFunction():
 
 def keyProcessing(keyValue):
     global keyMenuValue, keyDownValue, keyUpValue, beepCount, startBeepFlag
-    if keyValue == KEY_MENU:  # 判断按下了哪一个按键
+    if keyValue == KEY_MENU:  
         keyMenuValue += 1
     if keyValue == KEY_DOWN:
         keyDownValue += 1
     if keyValue == KEY_UP:
         keyUpValue += 1
 
-    if startBeepFlag == 1:  # 有按键按下
+    if startBeepFlag == 1:
         beepCount += 1
         if beepCount == 3:
             BUZZEROFF()
@@ -411,5 +415,5 @@ while True:
     if pageID == 2 and selectSettingOptions > 1:
         line1.text = ""
         showSystem.onOffPage(
-            line2, line3, selectSettingOptions, beepFlag, autoLightFlag
+            line2, line3, selectSettingOptions, beepFlag, autoLightFlag, timeFormatFlag
         )
