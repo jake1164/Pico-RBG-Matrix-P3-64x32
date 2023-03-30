@@ -3,13 +3,13 @@
 # and it is possible to modify the example to use other fonts and non-standard
 # characters.
 
-import adafruit_display_text.label
 import board
 import displayio
 import framebufferio
 import rgbmatrix
 import terminalio
-from digitalio import DigitalInOut, Direction
+import adafruit_display_text.label
+
 bit_depth_value = 1
 base_width = 64
 base_height = 32

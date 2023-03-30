@@ -41,9 +41,8 @@ matrix = rgbmatrix.RGBMatrix(
 
 # Associate matrix with a Display to use displayio features
 display = framebufferio.FramebufferDisplay(matrix, auto_refresh=False,
-                                           rotation=180)
+                                           rotation=0)
 
-display.rotation = 0
 
 # Load BMP image, create Group and TileGrid to hold it
 BITMAP = displayio.OnDiskBitmap(open('images/Word.bmp', 'rb'))
