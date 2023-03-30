@@ -14,7 +14,7 @@ bit_depth_value = 1
 base_width = 64
 base_height = 32
 chain_across = 1
-tile_down = 2
+tile_down = 1
 serpentine_value = True
 
 width_value = base_width * chain_across
