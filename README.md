@@ -15,3 +15,9 @@ Circuit libraries are included in the lib folder, just copy them to the Pico. To
 
 ### Documents
 The schematics for this are included in the documents folder for reference. 
+
+### Changes
+* Added RTC demo
+* Removed block of unused code from demo files making them easier to understand
+* Switched rotation to display correct rotation
+* Added Light Sensor demo
