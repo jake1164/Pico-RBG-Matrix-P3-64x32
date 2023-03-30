@@ -7,7 +7,7 @@ import framebufferio
 import adafruit_imageload
 import terminalio
 from adafruit_display_text.label import Label
-from digitalio import DigitalInOut, Direction
+
 displayio.release_displays()
 
 matrix = rgbmatrix.RGBMatrix(

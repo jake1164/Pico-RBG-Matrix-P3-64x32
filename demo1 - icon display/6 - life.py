@@ -3,7 +3,6 @@ import time
 
 import board
 import displayio
-from digitalio import DigitalInOut, Direction
 import framebufferio
 import rgbmatrix
 

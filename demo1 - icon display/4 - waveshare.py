@@ -7,7 +7,6 @@ import framebufferio
 import adafruit_imageload
 import terminalio
 from adafruit_display_text.label import Label
-from digitalio import DigitalInOut, Direction
 
 bit_depth_value = 1
 base_width = 64

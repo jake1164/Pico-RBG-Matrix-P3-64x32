@@ -8,7 +8,6 @@ import board
 import displayio
 import framebufferio
 import rgbmatrix
-from digitalio import DigitalInOut, Direction
 
 bit_depth_value = 6
 base_width = 64
