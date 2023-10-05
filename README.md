@@ -5,7 +5,7 @@ This is the example micropython code for the [Waveshare Pico RGB Matrix Clock](h
 The samples require using the adafruit CircuitPython as well as Adafruit CircuitPython libraries.
 
 ### CircuitPython Version 8.x.x
-They were originally found using the 7.1.1 release but are in the process of being updated to the latest 8.0.0.beta 4 version. To install download the latest 8.x.x version:
+This demo source has been updated to use CircuitPython 8.x.x. Download the latest 8.x.x version to install:
 
 * [pico](https://circuitpython.org/board/raspberry_pi_pico/)
 * [pico W](https://circuitpython.org/board/raspberry_pi_pico_w/)
